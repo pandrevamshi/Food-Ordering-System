@@ -3,6 +3,7 @@ package org.vamshi.streams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.Topology;
+import org.vamshi.config.OrderConfig;
 import org.vamshi.mapper.OrderMapper;
 import org.vamshi.publisher.OrderProducer;
 import org.vamshi.utils.CommonConstants;
@@ -19,7 +20,7 @@ public class OrderStream {
 
     public void startStream(Properties streamConfiguration){
         Topology builder = new Topology();
-        builder.addSource(CommonConstants.STREAM_NAME, "order_details")
+        builder.addSource(CommonConstants.STREAM_NAME, OrderConfig.getInstance().getSourceKafkaTopic())
                 .addProcessor(CommonConstants.MAPPER_NAME, () -> new OrderMapper(this.getClass().getName()), CommonConstants.STREAM_NAME)
                 .addProcessor(CommonConstants.PUBLISHER, () -> new OrderProducer(this.getClass().getName()), CommonConstants.MAPPER_NAME);
         KafkaStreams streams = new KafkaStreams(builder, streamConfiguration);

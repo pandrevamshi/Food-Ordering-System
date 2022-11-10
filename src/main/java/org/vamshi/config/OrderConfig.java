@@ -18,6 +18,7 @@ public class OrderConfig {
     String sourceBrokers;
     String destinationBrokers;
     String applicationId;
+    String confirmedAppId;
     String clientId;
     String offset;
 
@@ -35,6 +36,7 @@ public class OrderConfig {
             props.load(input);
 
             this.sourceBrokers = props.getProperty("source.kafka.brokers");
+            this.confirmedAppId = props.getProperty("confirmed.app.id");
             this.sourceKafkaTopic = props.getProperty("source.kafka.topic");
             this.destinationKafkaTopic = props.getProperty("sink.kafka.topic");
             this.destinationBrokers = props.getProperty("sink.kafka.brokers");
@@ -46,8 +48,4 @@ public class OrderConfig {
             log.info("Error while fetching the properties from source");
         }
     }
-
-
-
-
 }

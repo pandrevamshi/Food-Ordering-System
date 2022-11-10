@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.streams.processor.Processor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.vamshi.dto.OrderObject;
+import org.vamshi.publisher.ErrorProducer;
 
 public class OrderMapper implements Processor<byte[], Object> {
 
@@ -31,6 +32,7 @@ public class OrderMapper implements Processor<byte[], Object> {
             context.forward(key, orderObject);
 
         } catch (JsonProcessingException e) {
+            ErrorProducer.getInstance().sendToErrorTopic(payload.toString(), "parseError");
             throw new RuntimeException(e);
         }
     }
