@@ -24,6 +24,15 @@ public class OrderStream {
                 .addProcessor(CommonConstants.MAPPER_NAME, () -> new OrderMapper(this.getClass().getName()), CommonConstants.STREAM_NAME)
                 .addProcessor(CommonConstants.PUBLISHER, () -> new OrderProducer(this.getClass().getName()), CommonConstants.MAPPER_NAME);
         KafkaStreams streams = new KafkaStreams(builder, streamConfiguration);
-        streams.setUncaughtExceptionHandler((Thread thread, Throwable throwable)->log.error("Uncaught Exception {}", throwable.getMessage()));
+        streams.setUncaughtExceptionHandler((Thread thread, Throwable throwable)->log.error("Uncaught Exception {}", throwable.getStackTrace()));
+        streams.cleanUp();
+        streams.start();
+        Runtime.getRuntime().addShutdownHook(new Thread("shutdown") {
+            @Override
+            public void run() {
+                streams.close();
+            }
+        });
     }
+
 }

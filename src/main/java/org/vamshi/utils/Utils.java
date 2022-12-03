@@ -19,6 +19,8 @@ public class Utils {
         streamProperties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getCanonicalName());
         streamProperties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getCanonicalName());
         streamProperties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, OrderConfig.getInstance().getOffset());
+        streamProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+//        streamProperties.setProperty("state.dir", "/test");
         return streamProperties;
     }
 
